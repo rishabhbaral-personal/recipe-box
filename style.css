@@ -1,0 +1,80 @@
+:root {
+    --paper: #f9f4e8;
+    --wood: #5d4037;
+    --accent: #d84315;
+}
+
+body {
+    background-color: #efebe9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--wood);
+}
+
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--paper);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    border-bottom: 4px solid var(--wood);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-image {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-color: #ddd;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.tag {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+h3 {
+    margin: 10px 0;
+    color: var(--wood);
+}
+
+.view-btn {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: var(--accent);
+    font-weight: bold;
+    border: 1px solid var(--accent);
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.view-btn:hover {
+    background: var(--accent);
+    color: white;
+}
