@@ -28,17 +28,15 @@
 
         /* The Main Book Wrapper */
         #book-wrapper {
-            width: 500px; /* Width of a single page */
+            width: 500px;
             height: 700px;
             position: relative;
-            perspective: 2000px;
-            transition: width 1s ease-in-out;
-            cursor: pointer;
+            perspective: 2500px;
+            transition: width 1s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
 
         #book-wrapper.opened {
-            width: 1000px; /* Expands to two pages */
-            cursor: default;
+            width: 1000px;
         }
 
         /* The Cover */
@@ -60,6 +58,7 @@
             color: var(--gold);
             border: 2px solid #2d1b18;
             backface-visibility: hidden;
+            cursor: pointer;
         }
 
         .cover h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; text-align: center; margin: 10px 0; }
@@ -68,9 +67,10 @@
 
         .opened .cover {
             transform: rotateY(-180deg);
+            pointer-events: none;
         }
 
-        /* The Internal Pages (Cookbook) */
+        /* Interior Parchment */
         .cookbook {
             width: 1000px;
             height: 100%;
@@ -128,36 +128,45 @@
         }
         .toc-link:hover { color: #8d6e63; padding-left: 10px; }
 
-        .back-nav {
+        /* Navigation Buttons */
+        .nav-controls {
             position: absolute;
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 150;
+        }
+
+        .nav-btn {
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 3px;
             cursor: pointer;
-            z-index: 150;
             color: #8d6e63;
             font-weight: bold;
             background: rgba(253, 250, 240, 0.9);
-            padding: 5px 20px;
+            padding: 8px 20px;
             border: 1px solid #dcd1b3;
             border-radius: 20px;
+            transition: background 0.3s;
         }
+        .nav-btn:hover { background: #fff; }
 
         .ingredients-list ul { list-style: none; padding: 0; }
         .ingredients-list li { padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 1.2rem; }
         .method-list ol { padding-left: 20px; }
-        .method-list li { margin-bottom: 15px; font-size: 1.2rem; line-height: 1.6; }
+        .method-list li { margin-bottom: 15px; font-size: 1.15rem; line-height: 1.6; }
 
         .recipe-image {
             width: 100%;
-            height: 220px;
+            height: 240px;
             object-fit: cover;
             border: 6px solid #fff;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
+            border-radius: 2px;
         }
 
         ::-webkit-scrollbar { width: 6px; }
@@ -166,8 +175,8 @@
 </head>
 <body>
 
-<div id="book-wrapper" onclick="handleBookClick(event)">
-    <div class="cover">
+<div id="book-wrapper">
+    <div class="cover" id="book-cover" onclick="openBook()">
         <p>Archive of</p>
         <h1>Family Recipes</h1>
         <div class="ornament">❧</div>
@@ -176,7 +185,11 @@
 
     <div class="cookbook">
         <div class="spine-shadow"></div>
-        <div class="back-nav" id="index-nav" style="display:none;" onclick="showTOC()">Return to Index</div>
+        
+        <div class="nav-controls">
+            <div class="nav-btn" id="index-btn" style="display:none;" onclick="showTOC()">Index</div>
+            <div class="nav-btn" id="close-btn" style="display:none;" onclick="closeBook()">Close Book</div>
+        </div>
 
         <div class="page active" id="toc-1" style="border-right: 1px solid rgba(0,0,0,0.05);">
             <div class="header"><h2>Contents</h2></div>
@@ -221,150 +234,156 @@
     const recipes = {
         arisha: {
             name: "Arisha Pitha",
-            ing: ["3 cups rice", "2 cups Jaggery", "¾ cup water", "1 tbsp sesame seed", "1 cup Atta", "Cardamom powder"],
-            img: "https://images.unsplash.com/photo-1589113103503-49222401bc3b?q=80&w=600",
-            method: "<li>Soak rice overnight and dry. Grind to fine powder.</li><li>Heat water and add jaggery. Boil until syrup forms a solid lump in water.</li><li>Switch off heat, add rice powder slowly with constant stirring.</li><li>Add Atta and cardamom; mix well.</li><li>Form circles, roll in sesame, and fry over medium heat.</li>"
+            ing: ["3 cups rice", "2 cups Jaggery", "¾ cup water", "1 tbsp sesame seed", "1 cup Atta (wheat flour)", "Cardamom powder"],
+            img: "https://images.unsplash.com/photo-1589113103503-49222401bc3b?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Soak rice overnight and dry. Grind to a fine powder.</li><li>Boil water and add jaggery. Boil until the syrup is thick; a drop in cold water should form a solid lump.</li><li>Switch off heat and stir in rice powder slowly with constant stirring.</li><li>Add Atta and cardamom; mix well to create the paga.</li><li>Form small circles, roll in sesame seeds, and fry over medium heat.</li>"
         },
         besara: {
             name: "Besara",
-            ing: ["250g pumpkin", "Yam", "Raw banana", "Potato", "Sweet potato", "Pointed gourd", "Cowpeas", "Brinjal", "Chickpeas", "Mustard seeds", "Cumin", "Ginger", "Black pepper", "1 tsp jaggery"],
-            img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=600",
-            method: "<li>Grind mustard, cumin, ginger, and black pepper into fine paste.</li><li>Mix vegetables with paste, coconut, chickpeas, turmeric, and salt.</li><li>Cook until vegetables are tender; stir in jaggery.</li><li>Temper with ghee, mustard seeds, and dried red chillies.</li>"
+            ing: ["250g Pumpkin", "Yam", "Raw banana", "Sweet potato", "Pointed gourd", "Cowpeas", "Chickpeas", "Mustard seeds", "Cumin", "Ginger", "Black pepper"],
+            img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Grind mustard, cumin, ginger, and black pepper into a fine paste.</li><li>Mix the cut vegetables with the paste, coconut, chickpeas, turmeric, and salt.</li><li>Cook until vegetables are tender; stir in jaggery for balance.</li><li>Temper with ghee, mustard seeds, and dried red chillies.</li>"
         },
         birria: {
             name: "Birria (Mexican Pulled Goat)",
-            ing: ["4 lbs goat meat", "3 cups flour", "1 cup atta", "Broth", "Charred tomatoes", "Chili powder", "Cumin", "Ginger", "Cinnamon", "Cloves"],
-            img: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=600",
-            method: "<li>Season and brown goat meat in batches.</li><li>Sauté onions and garlic. Toast spices for a minute.</li><li>Blend charred tomatoes and broth until smooth.</li><li>Pressure cook meat in sauce for 45 mins.</li><li>Shred meat and serve in consommé with fresh tortillas.</li>"
+            ing: ["4 lbs goat meat", "3 cups flour", "1 cup atta", "Beef/Goat broth", "Charred tomatoes", "Chili powder", "Cumin", "Ginger", "Cinnamon", "Cloves"],
+            img: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Season and brown goat meat in batches; transfer to a plate.</li><li>Sauté onions and garlic. Stir in dry spices and toast.</li><li>Blend charred tomatoes and broth until smooth.</li><li>Pressure cook meat in the sauce for 45 minutes on HIGH.</li><li>Shred meat with forks and serve in the consommé with fresh handmade tortillas.</li>"
         },
         coconut: {
             name: "Coconut Fried Rice",
             ing: ["1 cup Rice", "½ cup Water", "1½ cups Coconut milk", "1 tbsp Shahi jeera", "Salt to taste"],
-            img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=600",
-            method: "<li>Soak rice, water, milk, and jeera for 30-45 mins.</li><li>Cook the mixture with salt until tender and milk is absorbed.</li>"
+            img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Soak the rice, water, coconut milk, and shahi jeera together for 30 to 45 minutes.</li><li>Cook the soaked mixture with salt until the rice is tender and the liquid is absorbed.</li>"
         },
         creamcake: {
             name: "Cuban Cream Cake",
             ing: ["2 cups Flour", "2 tsp Baking Powder", "1.5 cups sugar", "1.5 cups Heavy Whipping Cream", "3 eggs", "Vanilla extract"],
-            img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600",
-            method: "<li>Preheat oven to 350°F. Prep 9-inch round pans.</li><li>Sift dry ingredients together.</li><li>Whip heavy cream until thickened.</li><li>Beat eggs and fold them into the whipped cream.</li><li>Gently fold in dry ingredients and vanilla. Bake for 30 mins.</li>"
+            img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Preheat oven to 350°F. Prep 9-inch round pans.</li><li>Sift flour and baking powder together.</li><li>Whip heavy cream until thickened.</li><li>Beat eggs until frothy and fold them into the whipped cream.</li><li>Gently fold in dry ingredients and vanilla. Bake for 30 minutes.</li>"
         },
         kabab: {
             name: "Kabab",
-            ing: ["1 pack ground chicken/turkey", "Ginger/garlic paste", "Dhaniya leaves", "Ajwain", "Curd", "Kabab masala", "Butter", "Chaat masala"],
-            img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=600",
-            method: "<li>Mix all ingredients and freeze for 30 mins.</li><li>Form balls and drop into boiling water for 10 mins.</li><li>Strain and let dry.</li><li>Fry in butter for one minute and sprinkle with chaat masala.</li>"
+            ing: ["1 pack ground chicken or turkey", "Ginger/garlic paste", "Dhaniya leaves", "Ajwain", "Curd", "Kabab masala", "Butter", "Chaat masala"],
+            img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Mix all ingredients and freeze for 30 minutes to set.</li><li>Form into small balls and drop into boiling water for 10 minutes.</li><li>Strain and let dry.</li><li>Flash-fry in butter for one minute and sprinkle with chaat masala before serving.</li>"
         },
         khira: {
             name: "Khira Gaintha",
             ing: ["2 cups rice flour", "7 cups total milk", "Sugar", "Cardamom powder", "Coconut", "Cashews and Almonds"],
-            img: "https://images.unsplash.com/photo-1596797038530-2c39da0a7ca3?q=80&w=600",
-            method: "<li>Boil water with salt/oil. Gradually stir in rice flour; cook 5 mins.</li><li>Cool, knead, form small balls and steam.</li><li>Thicken milk and evaporated milk; add sugar and cardamom.</li><li>Drop balls into milk and simmer. Add nuts and coconut.</li>"
+            img: "https://images.unsplash.com/photo-1596797038530-2c39da0a7ca3?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Boil water with salt and oil. Gradually stir in rice flour and cook for 5 minutes.</li><li>Cool the mixture, knead into a ball, form small balls, and steam them.</li><li>Thicken milk and evaporated milk; add sugar and cardamom.</li><li>Drop the steamed balls into the milk and simmer. Garnish with nuts and coconut.</li>"
         },
         laal: {
             name: "Laal Mutton",
-            ing: ["1 kg Mutton", "3 tbsp red chilli paste", "1½ cup Ghee", "½ cup Curd", "Garlic paste", "Cardamom", "Cinnamon", "Cumin", "Bay leaves", "Onion"],
-            img: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=600",
-            method: "<li>Slow cook mutton in ghee with whole spices and onion.</li><li>Add chilli paste and curd to create deep red gravy.</li><li>Simmer on low until meat is fork-tender.</li>"
+            ing: ["1 kg Mutton", "3 tbsp dry red chilli paste", "1½ cup Ghee", "½ cup Curd", "Garlic paste", "Cardamom", "Cinnamon", "Cumin", "Bay leaves", "Onion"],
+            img: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Slow cook the mutton in ghee with whole spices and sliced onion.</li><li>Add the red chilli paste and curd to create the deep red gravy.</li><li>Simmer on low heat until the meat is fork-tender.</li>"
         },
         laau: {
             name: "Laau Ghanta",
             ing: ["12” bottle gourd", "4 Potatoes", "Tomato", "Onion", "Coconut", "Black beans", "Ghee", "Panch phutan", "Hingu"],
-            img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600",
+            img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=600",
             method: "<li>Cut gourd and potatoes into similar sizes.</li><li>Heat ghee with bay leaf, phutan, and cardamom. Sauté onion/ginger.</li><li>Add vegetables, coconut, and beans; cook covered.</li><li>Add tomato and hingu; cook until reduced.</li>"
         },
         malai: {
             name: "Malai Chicken",
             ing: ["Chicken pieces", "Heavy cream", "Cheese", "Mint/coriander paste", "Green chilli paste", "Black pepper", "Kasoori methi", "Hung curd", "Mustard oil"],
-            img: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=600",
-            method: "<li>Marinate chicken with lemon and ginger-garlic for 20 mins.</li><li>Coat in cream, cheese, herb paste, and oil; rest overnight.</li><li>Broil in oven, flipping once, until cooked.</li>"
+            img: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Marinate chicken with lemon and ginger-garlic for 20 mins.</li><li>Coat in cream, cheese, herb paste, and mustard oil; rest overnight.</li><li>Broil in the oven, flipping once, until fully cooked.</li>"
         },
         mango: {
             name: "Mango Pie",
             ing: ["15oz Mango Pulp", "½ cup Sugar", "8oz Philadelphia cheese", "8oz Cool Whip", "2 Jello packets", "Graham crust"],
-            img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600",
-            method: "<li>Mix cheese with sugar. Add pulp and cool whip.</li><li>Microwave jello with water (20s) and stir in.</li><li>Pour into crust and chill for 24 hours.</li>"
+            img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Mix room-temperature cheese with sugar.</li><li>Stir in mango pulp and fold in Cool Whip.</li><li>Microwave jello in ½ cup water for 20 seconds and stir into the mixture.</li><li>Pour into crust and chill for 24 hours before serving.</li>"
         },
         poda: {
             name: "Poda Pitha",
             ing: ["4 cups Rice", "2 cups black gram", "Coconut", "3 cups sugar/Jaggery", "Ginger", "Cashew", "Ghee", "Cardamom"],
-            img: "https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=600",
-            method: "<li>Soak rice and gram 4h. Grind gram fine, rice coarse.</li><li>Ferment 4h; mix with coconut, ginger, and sugar.</li><li>Bake in oiled pressure cooker on simmer for 1 hour.</li>"
+            img: "https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Soak rice and gram for 4 hours. Grind gram fine, rice coarse.</li><li>Ferment for 4 hours, then mix with coconut, ginger, and sugar.</li><li>Pour batter into an oiled pressure cooker and cook on simmer for 1 hour without a whistle.</li>"
         },
         poha: {
             name: "Poha Roll",
-            ing: ["1 egg", "30g Poha", "100g Potato", "2 green chillies", "200g roasted peanut", "1 onion", "Amchur"],
-            img: "https://images.unsplash.com/photo-1601050690597-df056fb27791?q=80&w=600",
-            method: "<li>Mash boiled potato with soaked poha, onion, and peanuts.</li><li>Form into rolls and dip in beaten egg.</li><li>Fry until golden and crispy.</li>"
+            ing: ["1 egg", "30g Poha", "100g Potato", "2 green chillies", "200g roasted peanut", "1 onion", "Amchur powder"],
+            img: "https://images.unsplash.com/photo-1601050690597-df056fb27791?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Mash boiled potato and mix with soaked rice flakes (poha), onion, peanuts, and spices.</li><li>Form into rolls or logs and dip in beaten egg.</li><li>Fry until golden brown and crispy.</li>"
         },
         potala: {
             name: "Potala Kurma",
             ing: ["5-6 Pointed gourd", "Onion", "Tomato", "Ginger-garlic paste", "Yogurt", "½ cup Coconut Milk", "Chena"],
-            img: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?q=80&w=600",
-            method: "<li>Curdle milk with lemon for chena; strain.</li><li>Fry slitted gourds. Sauté ginger-chili paste and yogurt.</li><li>Add water, chena, and gourds; simmer to thicken.</li>"
+            img: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Curdle milk with lemon for chena; strain and hang.</li><li>Fry slitted gourds. Sauté ginger-chili paste and yogurt until dry.</li><li>Add water, chena, and fried gourds; simmer to thicken.</li>"
         },
         potol: {
             name: "Potol Rasha",
             ing: ["500g Pointed Gourd", "Coconut-ginger paste", "1 cup Coconut Milk", "Panch phutan", "Ghee"],
-            img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600",
-            method: "<li>Fry gourd rounds in ghee. Sauté masala paste with phutan and bay leaf.</li><li>Add fried gourd with coconut milk and simmer.</li>"
+            img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Fry gourd rounds in ghee. Sauté masala paste in ghee with phutan and bay leaf.</li><li>Add fried gourd with coconut milk and salt; simmer until oil separates.</li>"
         },
         pudding: {
             name: "Pudding",
-            ing: ["2 cups milk", "4 eggs", "7 tsp sugar", "Vanilla essence", "Caramel sugar"],
-            img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=600",
-            method: "<li>Prepare caramel in tiffin box. Blend eggs, sugar, milk, and vanilla.</li><li>Steam tiffin in pressure cooker for one whistle, then 15 mins slow flame.</li><li>Cool and flip to serve.</li>"
+            ing: ["2 cups milk", "4 eggs", "7 tsp sugar", "Vanilla essence", "2 tsp sugar for caramel"],
+            img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Prepare caramel in a steel tiffin box until light brown.</li><li>Grind egg, sugar, vanilla, and milk into a mixture.</li><li>Steam tiffin box in a pressure cooker water bath for one whistle, then 15 minutes slow flame.</li><li>Cool and flip onto a plate to serve.</li>"
         },
         fruitpudding: {
             name: "Quick Fruit Pudding",
             ing: ["1 tin mango pulp", "1 tin condensed milk", "1 container whip cream", "Seasonal fruits"],
-            img: "https://images.unsplash.com/photo-1541924445947-8898144c4491?q=80&w=600",
-            method: "<li>Whisk pulp and condensed milk. Fold in whip cream.</li><li>Garnish with fruits and serve chilled.</li>"
+            img: "https://images.unsplash.com/photo-1541924445947-8898144c4491?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Whisk mango pulp and condensed milk together until well mixed.</li><li>Stir in whip cream and mix again.</li><li>Garnish with fresh fruits; serve chilled or frozen.</li>"
         },
         rajma: {
             name: "Rajma",
-            ing: ["2 cups boiled beans", "1 tbsp besan", "Ghee", "Ginger", "Tomato", "Bay leaf", "Jeera"],
-            img: "https://images.unsplash.com/photo-1585937421612-70a0f295561a?q=80&w=600",
-            method: "<li>Heat ghee with bay leaf/jeera. Fry besan until reddish.</li><li>Add ginger, tomato, and beans; simmer until thick.</li>"
+            ing: ["2 cups boiled beans", "1 tbsp besan", "1 tbsp ghee", "Ginger", "Tomato", "Bay leaf", "Jeera"],
+            img: "https://images.unsplash.com/photo-1585937421612-70a0f295561a?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Heat ghee and temper with bay leaf and jeera.</li><li>Add besan and fry until reddish and fragrant.</li><li>Add aromatics, tomatoes, and boiled beans; simmer until thick.</li>"
         },
         rasagolla: {
             name: "Rasagolla",
-            ing: ["3L milk", "3 tbsp vinegar", "1.5 tbsp flour", "1.5 cups sugar", "Cardamom"],
-            img: "https://images.unsplash.com/photo-1605065532060-60f1ec3c8801?q=80&w=600",
-            method: "<li>Curdle milk with vinegar; hang chena 1h. Knead with flour until smooth.</li><li>Boil balls in sugar syrup (12m high, 5m low).</li>"
+            ing: ["3L full cream milk", "3 tbsp vinegar", "1.5 tbsp flour", "1.5 cups sugar", "Cardamom"],
+            img: "https://images.unsplash.com/photo-1605065532060-60f1ec3c8801?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Curdle boiling milk with vinegar; strain and hang chena for 1 hour.</li><li>Knead chena with flour for 8 minutes until smooth.</li><li>Boil balls in sugar syrup (12 minutes high, 5 minutes low flame).</li>"
         },
         rashmalai: {
             name: "Rashmalai",
-            ing: ["1 box Rasagolla", "1 can evaporated milk", "1 cup milk", "Kulfi mix"],
-            img: "https://images.unsplash.com/photo-1626202340502-9965133d4945?q=80&w=600",
-            method: "<li>Boil milk/evaporated milk with kulfi mix.</li><li>Squeeze Rasagollas and drop in milk. Simmer 2m; serve cold.</li>"
+            ing: ["1 box Rasagolla", "1 can evaporated milk", "1 cup milk", "1 packet Kulfi mix"],
+            img: "https://images.unsplash.com/photo-1626202340502-9965133d4945?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Heat milk and evaporated milk for 5 minutes; stir in Kulfi mix.</li><li>Squeeze syrup from Rasagollas and drop into hot milk.</li><li>Warm for 2 minutes and serve chilled.</li>"
         },
         suji: {
             name: "Suji Cake",
-            ing: ["3 cups Suji", "3 cups buttermilk", "3/4 cup oil", "3/4 cup sugar", "Soda", "Coconut"],
-            img: "https://images.unsplash.com/photo-1602351447937-745cb720612f?q=80&w=600",
-            method: "<li>Mix all ingredients. Let batter rest for 2 hours.</li><li>Bake at 350°F for exactly one hour.</li>"
+            ing: ["3 cups Suji", "3 cups buttermilk", "3/4 cup oil", "3/4 cup sugar", "1 tsp baking soda", "1 cup coconut"],
+            img: "https://images.unsplash.com/photo-1602351447937-745cb720612f?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Mix all ingredients together in a large bowl.</li><li>Let the batter sit at room temperature for 2 hours.</li><li>Bake in a preheated oven at 350°F for exactly one hour.</li>"
         },
         watergate: {
             name: "Watergate Salad",
-            ing: ["Pistachio pudding mix", "Pineapple", "Marshmallows", "Nuts", "Whipped topping"],
-            img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600",
-            method: "<li>Stir pudding mix, pineapple, marshmallows, and nuts.</li><li>Fold in whipped topping and refrigerate for one hour.</li>"
+            ing: ["4oz pistachio pudding mix", "20oz crushed pineapple", "1 cup marshmallows", "1¾ cups whipped topping", "Nuts"],
+            img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600",
+            method: "<li>Stir pudding mix, pineapple with juice, marshmallows, and nuts until blended.</li><li>Gently fold in the whipped topping.</li><li>Refrigerate for at least one hour before serving.</li>"
         }
     };
 
-    function handleBookClick(e) {
-        const wrapper = document.getElementById('book-wrapper');
-        if (!wrapper.classList.contains('opened')) {
-            wrapper.classList.add('opened');
-        }
+    function openBook() {
+        document.getElementById('book-wrapper').classList.add('opened');
+        document.getElementById('close-btn').style.display = 'block';
+    }
+
+    function closeBook() {
+        document.getElementById('book-wrapper').classList.remove('opened');
+        document.getElementById('close-btn').style.display = 'none';
+        document.getElementById('index-btn').style.display = 'none';
+        // Reset to TOC view
+        showTOC();
     }
 
     function showTOC() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('toc-1').classList.add('active');
         document.getElementById('toc-2').classList.add('active');
-        document.getElementById('index-nav').style.display = 'none';
+        document.getElementById('index-btn').style.display = 'none';
     }
 
     function loadRecipe(id) {
@@ -392,7 +411,7 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         left.classList.add('active');
         right.classList.add('active');
-        document.getElementById('index-nav').style.display = 'block';
+        document.getElementById('index-btn').style.display = 'block';
     }
 </script>
 
