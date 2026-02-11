@@ -3,114 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Digital Recipe Box</title>
+    <title>Recipe Box: Das-Mohapatra-Baral Family</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>The Recipe Box</h1>
-        <p>A collection of traditional Odia delicacies and global favorites.</p>
-    </header>
+    <div class="recipe-box">
+        <header class="box-lid">
+            <h1>The Secret Ingredient is Love</h1>
+        </header>
 
-    <main class="recipe-grid">
-        <article class="card">
-            <div class="card-image" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/41/Arisa_Pitha.jpg');"></div>
-            <div class="card-content">
-                <span class="tag">Sugar</span>
-                <h3>Arisha Pitha</h3>
-                <div class="recipe-details">
-                    <h4>Ingredients:</h4>
-                    <ul>
-                        <li>3 cups Rice</li>
-                        <li>2 cups Jaggery</li>
-                        <li>¼ cup Water</li>
-                        <li>1 tbsp Sesame seeds</li>
-                        <li>1 cup Atta (wheat flour)</li>
-                        <li>Cardamom powder</li>
-                    </ul>
-                    <h4>Instructions:</h4>
-                    <p>Soak rice overnight, grind into powder. Boil jaggery in water until it forms a solid lump in cold water. Mix in rice powder and atta slowly to avoid lumps. Add cardamom. Shape into small circles, roll in sesame, and fry.</p>
-                </div>
-            </div>
-        </article>
+        <nav class="category-tabs">
+            <button class="tab-btn active" onclick="filterCategory('sugar')">Sugar / Desserts</button>
+            <button class="tab-btn" onclick="filterCategory('salt')">Salt / Savory</button>
+        </nav>
 
-        <article class="card">
-            <div class="card-image" style="background-image: url('https://img.youtube.com/vi/XulUVZiiS0o/maxresdefault.jpg');"></div>
-            <div class="card-content">
-                <span class="tag">Sugar</span>
-                <h3>Poda Pitha</h3>
-                <div class="recipe-details">
-                    <h4>Ingredients:</h4>
-                    <ul>
-                        <li>Rice & Skinless Black Gram (Biri)</li>
-                        <li>Jaggery & Cardamom</li>
-                        <li>Small pieces of Coconut & Ginger</li>
-                        <li>Salt</li>
-                    </ul>
-                    <h4>Instructions:</h4>
-                    <p>Soak and grind rice and biri separately, then mix and ferment. Add ginger, jaggery, coconut, and cardamom. Traditionally slow-cooked in a tiffin box or pressure cooker until the outer layer is charred ("poda").</p>
-                </div>
-            </div>
-        </article>
+        <main class="card-container">
+            <section class="category-section active" id="sugar">
+                <article class="recipe-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Arisa_Pitha.jpg" alt="Arisha Pitha">
+                    <div class="card-text">
+                        <h3>Arisha Pitha [cite: 2]</h3>
+                        <p><strong>Ingredients:</strong> 3c rice, 2c jaggery, 1/4c water, 1tbsp sesame seeds, 1c atta, cardamom powder[cite: 3, 4, 5, 6, 7].</p>
+                        <p><strong>Method:</strong> Soak and grind rice[cite: 9]. Boil jaggery to "solid lump" consistency[cite: 10]. Mix rice and atta into syrup, add cardamom, shape, and fry with sesame seeds[cite: 11, 12, 13].</p>
+                    </div>
+                </article>
 
-        <article class="card">
-            <div class="card-image" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/73/Birria_de_Chivo.jpg');"></div>
-            <div class="card-content">
-                <span class="tag">Salt</span>
-                <h3>Birria (Goat)</h3>
-                <div class="recipe-details">
-                    <h4>Ingredients:</h4>
-                    <ul>
-                        <li>3-4 lbs Goat meat</li>
-                        <li>Cinnamon sticks & Cloves</li>
-                        <li>Ginger & Garlic</li>
-                        <li>Fire-roasted tomatoes & Chicken broth</li>
-                        <li>Vinegar & Oregano</li>
-                    </ul>
-                    <h4>Instructions:</h4>
-                    <p>Sauté aromatics, blend with tomatoes and broth to make a sauce. Pressure cook goat meat in the sauce for 45 minutes until fall-apart tender. Shred the meat and serve in the consommé.</p>
-                </div>
-            </div>
-        </article>
+                <article class="recipe-card">
+                    <img src="https://img.youtube.com/vi/XulUVZiiS0o/maxresdefault.jpg" alt="Poda Pitha">
+                    <div class="card-text">
+                        <h3>Poda Pitha [cite: 38]</h3>
+                        <p><strong>Ingredients:</strong> 4c rice, 2c black gram, coconut (grated & sliced), 3c sugar/jaggery, ginger, cashew, ghee, salt, baking powder, cardamom/bay leaf[cite: 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49].</p>
+                        <p><strong>Method:</strong> Grind soaked rice/gram, ferment for 4hrs[cite: 51, 52, 53, 54]. Mix all ingredients, pour into oiled pressure cooker, and cook on simmer for 1hr without whistle[cite: 54, 55, 56, 57, 58].</p>
+                    </div>
+                </article>
 
-        <article class="card">
-            <div class="card-image" style="background-image: url('https://www.oriyarasoi.com/wp-content/uploads/2013/10/Besara.jpg');"></div>
-            <div class="card-content">
-                <span class="tag">Salt</span>
-                <h3>Besara</h3>
-                <div class="recipe-details">
-                    <h4>Ingredients:</h4>
-                    <ul>
-                        <li>Pumpkin, Yam, Raw Banana, Sweet Potato</li>
-                        <li>Mustard & Cumin seeds</li>
-                        <li>Garlic, Red chili & Turmeric</li>
-                        <li>Ambula (Dried Mango) or Tamarind</li>
-                    </ul>
-                    <h4>Instructions:</h4>
-                    <p>Grind mustard, cumin, garlic, and chili into a smooth paste. Boil vegetables with turmeric and salt. Stir in the mustard paste and add ambula for tanginess. Simmer until veggies are tender.</p>
-                </div>
-            </div>
-        </article>
+                <article class="recipe-card">
+                    <img src="https://www.oriyarasoi.com/wp-content/uploads/2013/10/Besara.jpg" alt="Khira Gaintha">
+                    <div class="card-text">
+                        <h3>Khira Gaintha [cite: 62]</h3>
+                        <p><strong>Ingredients:</strong> 2c rice flour, sugar, 7c total milk (inc. evaporated), cardamom, coconut, cashews, almonds[cite: 64, 66, 67, 69, 70, 71, 72, 73].</p>
+                        <p><strong>Method:</strong> Cook rice flour in boiling water until it forms a dough[cite: 75, 77, 78]. Form balls and steam[cite: 80, 81]. Boil milk until thick, add sugar/cardamom, and drop balls into milk. Garnish with nuts/coconut[cite: 82, 83, 85].</p>
+                    </div>
+                </article>
 
-        <article class="card">
-            <div class="card-image" style="background-image: url('https://www.bettycrocker.com/-/media/GMI/Recipes/W/Watergate-Salad.jpg');"></div>
-            <div class="card-content">
-                <span class="tag">Sugar</span>
-                <h3>Watergate Salad</h3>
-                <div class="recipe-details">
-                    <h4>Ingredients:</h4>
-                    <ul>
-                        <li>1 can Crushed Pineapple</li>
-                        <li>1 box Pistachio Pudding mix</li>
-                        <li>1 cup Miniature Marshmallows</li>
-                        <li>1 cup Chopped Pecans</li>
-                        <li>1 container Whipped Topping</li>
-                    </ul>
-                    <h4>Instructions:</h4>
-                    <p>Combine pineapple (with juice), pudding mix, and marshmallows in a bowl. Fold in the whipped topping and pecans. Chill for at least one hour before serving.</p>
-                </div>
-            </div>
-        </article>
-    </main>
+                <article class="recipe-card">
+                    <img src="https://www.bettycrocker.com/-/media/GMI/Recipes/W/Watergate-Salad.jpg" alt="Watergate Salad">
+                    <div class="card-text">
+                        <h3>Watergate Salad [cite: 29]</h3>
+                        <p><strong>Ingredients:</strong> Pistachio pudding mix, 20oz crushed pineapple with juice, 1c marshmallows, 1/2c nuts, 1 3/4c whipped topping[cite: 30, 31, 32, 33, 34].</p>
+                        <p><strong>Method:</strong> Blend pudding mix, pineapple, marshmallows, and nuts[cite: 35]. Fold in whipped topping and chill for 1hr[cite: 36, 37].</p>
+                    </div>
+                </article>
+            </section>
+
+            <section class="category-section" id="salt">
+                <article class="recipe-card">
+                    <img src="https://www.oriyarasoi.com/wp-content/uploads/2013/10/Besara.jpg" alt="Besara">
+                    <div class="card-text">
+                        <h3>Besara [cite: 197]</h3>
+                        <p><strong>Ingredients:</strong> Pumpkin, yam, raw banana, sweet potato, potol, cowpeas, chickpeas, brinjal, coconut, mustard/cumin seeds, ginger, black pepper[cite: 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 210, 211].</p>
+                        <p><strong>Method:</strong> Grind spices into paste[cite: 219]. Cook vegetables with paste, coconut, and water[cite: 220, 221, 222]. Temper with ghee, mustard seeds, and red chillies[cite: 224, 225].</p>
+                    </div>
+                </article>
+
+                <article class="recipe-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Birria_de_Chivo.jpg" alt="Birria">
+                    <div class="card-text">
+                        <h3>Birria (Mexican Pulled Goat) [cite: 326]</h3>
+                        <p><strong>Ingredients:</strong> 3-4lb goat meat, cinnamon, cloves, cumin, ginger, onion, garlic, chicken broth, fire-roasted tomatoes, oregano, bay leaves[cite: 326].</p>
+                        <p><strong>Method:</strong> Sauté onion/garlic, add spices, broth, and blended tomatoes[cite: 329, 330, 331, 333, 334, 335]. Pressure cook meat for 45 mins until tender, then shred into the consommé[cite: 338, 341, 343, 346].</p>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function filterCategory(catId) {
+            document.querySelectorAll('.category-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(catId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
 </body>
 </html>
