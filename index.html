@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Staggered Digital Recipe Box</title>
+    <title>The Digital Recipe Box</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
         }
 
         .scene {
-            perspective: 2500px;
+            perspective: 2000px;
             width: 100%;
             height: 100%;
             display: flex;
@@ -42,11 +42,11 @@
         /* The Box - Open crate style */
         .recipe-box {
             width: 600px;
-            height: 220px;
+            height: 200px;
             position: relative;
             transform-style: preserve-3d;
-            transform: rotateX(-12deg) rotateY(-8deg);
-            margin-top: 150px;
+            transform: rotateX(-10deg) rotateY(-5deg);
+            margin-top: 180px;
         }
 
         .face {
@@ -54,13 +54,15 @@
             background: var(--box-wood);
             border: 3px solid var(--box-dark);
             box-shadow: inset 0 0 50px rgba(0,0,0,0.6);
+            pointer-events: none; /* Allows clicking cards through the box faces */
         }
 
-        .front { width: 600px; height: 220px; transform: translateZ(140px); display: flex; align-items: flex-start; justify-content: center; padding-top: 20px; color: #d7ccc8; font-family: 'Dancing Script', cursive; font-size: 2.8rem; z-index: 100; pointer-events: none;}
-        .back { width: 600px; height: 220px; transform: rotateY(180deg) translateZ(140px); }
-        .left { width: 280px; height: 220px; transform: rotateY(-90deg) translateZ(0px); }
-        .right { width: 280px; height: 220px; transform: rotateY(90deg) translateZ(600px); }
-        .bottom { width: 600px; height: 280px; transform: rotateX(-90deg) translateZ(110px); }
+        /* Front face is slightly shorter to show the tabs better */
+        .face-front { width: 600px; height: 160px; transform: translateZ(140px); bottom: 0; display: flex; align-items: center; justify-content: center; color: #d7ccc8; font-family: 'Dancing Script', cursive; font-size: 2.8rem;}
+        .face-back { width: 600px; height: 200px; transform: rotateY(180deg) translateZ(140px); }
+        .face-left { width: 280px; height: 200px; transform: rotateY(-90deg) translateZ(0px); }
+        .face-right { width: 280px; height: 200px; transform: rotateY(90deg) translateZ(600px); }
+        .face-bottom { width: 600px; height: 280px; transform: rotateX(-90deg) translateZ(100px); }
 
         /* The Card Stack */
         .cards-stack {
@@ -74,26 +76,28 @@
         }
 
         .recipe-card {
-            width: 480px;
-            height: 380px;
+            width: 500px;
+            height: 400px;
             position: absolute;
-            /* Z-stacking and slight stagger inside the box */
-            bottom: calc(-120px + (var(--i) * 3px));
-            left: calc(10px + (var(--i) * 0.2px));
+            /* Inactive cards sit inside the box */
+            bottom: calc(-100px + (var(--i) * 2px));
+            left: 0;
             cursor: pointer;
-            transition: all 0.7s cubic-bezier(0.17, 0.88, 0.32, 1.28);
+            transition: all 0.6s cubic-bezier(0.17, 0.88, 0.32, 1.15);
             transform-style: preserve-3d;
             z-index: calc(200 - var(--i));
+            transform: translateZ(calc(var(--i) * 1px));
         }
 
         .recipe-card:hover:not(.active) {
-            bottom: calc(-90px + (var(--i) * 3px));
+            transform: translateZ(150px) translateY(-20px);
         }
 
+        /* Active Card: Pulls out to the center of the screen */
         .recipe-card.active {
-            bottom: 300px;
-            height: 650px;
-            transform: translateZ(500px) rotateX(2deg);
+            bottom: 250px;
+            height: 600px;
+            transform: translateZ(400px) scale(1.1);
             z-index: 1000 !important;
         }
 
@@ -106,7 +110,7 @@
             background-color: var(--paper-color);
             background-image: linear-gradient(var(--rule-blue) 1px, transparent 1px);
             background-size: 100% 28px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
             border-radius: 4px;
             border: 1px solid #ddd;
         }
@@ -115,20 +119,20 @@
         .card-inner::before {
             content: "";
             position: absolute;
-            top: 0; left: 55px;
+            top: 0; left: 60px;
             width: 2px; height: 100%;
             background: var(--rule-red);
             opacity: 0.6;
             z-index: 1;
         }
 
-        /* The Staggered Tab Logic */
+        /* Staggered Tab */
         .card-tab {
             position: absolute;
-            top: -40px;
-            /* Staggering: cycle between 0, 1, 2 for Left, Middle, Right positions */
-            left: calc((var(--pos)) * 155px + 10px);
-            width: 150px;
+            top: -42px;
+            /* Cycles tabs across 4 positions: Left, Mid-L, Mid-R, Right */
+            left: calc((var(--i) % 4) * 120px + 10px);
+            width: 110px;
             height: 45px;
             background: var(--paper-color);
             border: 1px solid #ddd;
@@ -138,13 +142,12 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #444;
             box-shadow: 0 -3px 5px rgba(0,0,0,0.1);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 0 10px;
+            padding: 0 5px;
+            text-align: center;
+            pointer-events: auto;
         }
 
         .recipe-card.active .card-inner { transform: rotateY(180deg); }
@@ -154,7 +157,7 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            padding: 20px 25px 20px 75px;
+            padding: 20px 30px 20px 80px;
             box-sizing: border-box;
             overflow-y: auto;
         }
@@ -166,20 +169,21 @@
 
         .dish-img {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
-            border: 5px solid white;
+            border: 6px solid white;
             box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-            margin: 15px 0;
+            margin: 10px 0;
+            border-radius: 2px;
         }
 
-        h3 { margin: 0; font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--box-dark); }
+        h3 { margin: 0; font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--box-dark); text-align: left; }
         h4 { margin: 0 0 10px 0; font-family: 'Dancing Script', cursive; font-size: 2.5rem; text-align: center; color: var(--box-dark); }
         p, li { font-size: 1.3rem; line-height: 1.4; font-weight: 600; color: var(--ink-color); margin: 8px 0; }
-        ol, ul { padding-left: 20px; margin: 10px 0; }
+        ol { padding-left: 25px; margin: 10px 0; }
         strong { color: var(--box-dark); }
 
-        .card-back::-webkit-scrollbar { width: 6px; }
+        .card-back::-webkit-scrollbar { width: 8px; }
         .card-back::-webkit-scrollbar-thumb { background: #d3c6a3; border-radius: 10px; }
     </style>
 </head>
@@ -187,436 +191,458 @@
 
 <div class="scene">
     <div class="recipe-box">
-        <div class="face front">Family Kitchen</div>
-        <div class="face back"></div>
-        <div class="face left"></div>
-        <div class="face right"></div>
-        <div class="face bottom"></div>
+        <div class="face face-front">Family Recipes</div>
+        <div class="face face-back"></div>
+        <div class="face face-left"></div>
+        <div class="face face-right"></div>
+        <div class="face face-bottom"></div>
         
         <div class="cards-stack">
-            <div class="recipe-card" style="--i:1; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:1" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Arisha Pitha</div>
                     <div class="card-front">
                         <h3>Arisha Pitha</h3>
-                        <img src="https://images.unsplash.com/photo-1589113103503-49222401bc3b?q=80&w=400" class="dish-img">
-                        <p>An Oriya traditional sweet  made with rice and jaggery[cite: 3, 4].</p>
+                        <img src="https://images.unsplash.com/photo-1589113103503-49222401bc3b?q=80&w=500" class="dish-img">
+                        <p>Traditional Oriya sweet circles fried with sesame seeds and jaggery.</p>
                     </div>
                     <div class="card-back">
                         <h4>Arisha Pitha</h4>
-                        <p><strong>Ingredients:</strong> 3c rice [cite: 3], 2c jaggery [cite: 4], 3/4c water [cite: 5], 1tbsp sesame [cite: 6], 1c Atta [cite: 7], Cardamom pwd[cite: 8].</p>
+                        <p><strong>Ingredients:</strong> 3c rice, 2c jaggery, 3/4c water, 1tbsp sesame, 1c Atta, Cardamom.</p>
                         <ol>
-                            <li>Soak rice overnight, dry it, and grind into fine powder[cite: 9].</li>
-                            <li>Boil water and jaggery until the drop forms a solid lump in water[cite: 10].</li>
-                            <li>Switch off heat and stir in rice powder and Atta[cite: 11, 12].</li>
-                            <li>Roll paga into circles, coat in sesame, and fry[cite: 13].</li>
+                            <li>Soak rice overnight, dry it, and grind into a fine powder.</li>
+                            <li>Boil water and jaggery until the drop forms a solid lump in cold water.</li>
+                            <li>Switch off the heat and stir in rice powder and Atta slowly.</li>
+                            <li>Mix in cardamom powder.</li>
+                            <li>Roll into small circles, coat in sesame, and fry until golden.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:2; --pos:1" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:2" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Besara</div>
                     <div class="card-front">
                         <h3>Besara</h3>
-                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=400" class="dish-img">
-                        <p>Veggie curry in mustard paste[cite: 194, 204].</p>
+                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=500" class="dish-img">
+                        <p>Mixed vegetables cooked in a pungent mustard-cumin paste.</p>
                     </div>
                     <div class="card-back">
                         <h4>Besara</h4>
-                        <p><strong>Ingredients:</strong> Pumpkin, yam, banana [cite: 195, 196, 197], mustard, cumin, ginger, coconut[cite: 204, 205, 207, 203].</p>
+                        <p><strong>Ingredients:</strong> Pumpkin, yam, banana, mustard, cumin, ginger, coconut, jaggery.</p>
                         <ol>
-                            <li>Grind mustard, cumin, ginger, and black pepper[cite: 218].</li>
-                            <li>Cook vegetables with paste and coconut[cite: 219, 220].</li>
-                            <li>Temper with ghee, mustard, and red chillies[cite: 223, 224].</li>
+                            <li>Grind mustard, cumin, ginger, and black pepper into a smooth paste.</li>
+                            <li>Cook chopped vegetables with the paste, coconut, and water.</li>
+                            <li>Stir in jaggery for balance once the veggies are tender.</li>
+                            <li>Temper with ghee, mustard seeds, and dried red chillies.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:3; --pos:2" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:3" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Birria</div>
                     <div class="card-front">
                         <h3>Birria (Goat)</h3>
-                        <img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=400" class="dish-img">
-                        <p>Mexican pulled goat stew [cite: 368] with homemade tortillas[cite: 386].</p>
+                        <img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=500" class="dish-img">
+                        <p>Mexican slow-cooked goat meat stew served with fresh tortillas.</p>
                     </div>
                     <div class="card-back">
                         <h4>Birria</h4>
-                        <p><strong>Ingredients:</strong> 4lb goat [cite: 369], spices, 2c broth [cite: 381], 4c tomatoes[cite: 382].</p>
+                        <p><strong>Ingredients:</strong> 4lb goat meat, cinnamon, cloves, cumin, ginger, broth, tomatoes, onion, garlic.</p>
                         <ol>
-                            <li>Brown meat, then sauté onion and garlic[cite: 395, 396, 397].</li>
-                            <li>Blend sauce until smooth and pressure cook for 45 mins[cite: 402, 406].</li>
-                            <li>Shred meat and serve in consommé[cite: 423, 427].</li>
+                            <li>Brown the meat chunks and sauté onions/garlic.</li>
+                            <li>Blend sauce with charred tomatoes, broth, and spices.</li>
+                            <li>Pressure cook for 45 minutes on high.</li>
+                            <li>Shred meat and serve in the consommé with fresh tortillas.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:4; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:4" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Coconut Rice</div>
                     <div class="card-front">
                         <h3>Coconut Fried Rice</h3>
-                        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=400" class="dish-img">
-                        <p>Fragrant rice soaked in coconut milk[cite: 361, 364].</p>
+                        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=500" class="dish-img">
+                        <p>Fragrant rice soaked in rich coconut milk and spiced with shahi jeera.</p>
                     </div>
                     <div class="card-back">
                         <h4>Coconut Fried Rice</h4>
-                        <p><strong>Ingredients:</strong> 1c rice [cite: 362], 1.5c coconut milk [cite: 364], 0.5c water [cite: 363], 1tbsp shahi jeera[cite: 365].</p>
+                        <p><strong>Ingredients:</strong> 1c Rice, 1.5c coconut milk, 0.5c water, 1tbsp shahi jeera, salt.</p>
                         <ol>
-                            <li>Soak all four ingredients for 30-45 mins[cite: 366].</li>
-                            <li>Add salt and cook[cite: 367].</li>
+                            <li>Combine rice, coconut milk, water, and jeera.</li>
+                            <li>Soak the mixture for 45 minutes.</li>
+                            <li>Cook on low heat until the rice is tender and milk is absorbed.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:5; --pos:1" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:5" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Cream Cake</div>
                     <div class="card-front">
                         <h3>Cuban Cream Cake</h3>
-                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400" class="dish-img">
-                        <p>Rich cake made with whipped heavy cream[cite: 138, 144].</p>
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=500" class="dish-img">
+                        <p>An incredibly rich sponge cake using heavy cream instead of butter.</p>
                     </div>
                     <div class="card-back">
                         <h4>Cuban Cream Cake</h4>
-                        <p><strong>Ingredients:</strong> 2c Flour [cite: 140], 1.5c sugar [cite: 143], 1.5c cream [cite: 144], 3 eggs[cite: 145].</p>
+                        <p><strong>Ingredients:</strong> 2c Flour, baking powder, 1.5c sugar, 1.5c heavy cream, 3 eggs, vanilla.</p>
                         <ol>
-                            <li>Sift dry ingredients[cite: 150].</li>
-                            <li>Whip cream, then fold in frothy eggs[cite: 151, 152].</li>
-                            <li>Gently fold in dry ingredients and bake at 350F[cite: 153, 155].</li>
+                            <li>Whip the heavy cream until it thickens.</li>
+                            <li>Beat eggs until frothy and fold them into the cream.</li>
+                            <li>Gently fold in the dry ingredients and vanilla.</li>
+                            <li>Bake at 350°F for 30-40 minutes.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:6; --pos:2" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:6" onclick="toggleCard(this)">
                 <div class="card-inner">
+                    <div class="card-tab">Kabab</div>
                     <div class="card-front">
                         <h3>Kabab</h3>
-                        <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=400" class="dish-img">
-                        <p>Ground chicken or turkey kababs[cite: 287, 289].</p>
+                        <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=500" class="dish-img">
+                        <p>Chicken or turkey kebabs, boiled then flash-fried in butter.</p>
                     </div>
                     <div class="card-back">
                         <h4>Kabab</h4>
-                        <p><strong>Ingredients:</strong> Ground meat [cite: 289], ginger-garlic [cite: 290, 291], Shan masala [cite: 297], curd[cite: 296].</p>
+                        <p><strong>Ingredients:</strong> Ground meat, ginger, garlic, curd, Chaplee masala, butter, chaat masala.</p>
                         <ol>
-                            <li>Mix and freeze for 30 mins[cite: 301].</li>
-                            <li>Boil balls for 10 mins[cite: 303, 304].</li>
-                            <li>Fry in butter and sprinkle chaat masala[cite: 305, 306].</li>
+                            <li>Mix ingredients and freeze for 30 minutes.</li>
+                            <li>Form balls and boil in water for 10 minutes.</li>
+                            <li>Drain and flash-fry in butter.</li>
+                            <li>Sprinkle with chaat masala.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:7; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:7" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Khira Gaintha</div>
                     <div class="card-front">
                         <h3>Khira Gaintha</h3>
-                        <img src="https://images.unsplash.com/photo-1596797038530-2c39da0a7ca3?q=80&w=400" class="dish-img">
-                        <p>Rice flour dumplings in thickened milk[cite: 61, 73, 80].</p>
+                        <img src="https://images.unsplash.com/photo-1596797038530-2c39da0a7ca3?q=80&w=500" class="dish-img">
+                        <p>Rice flour dumplings simmered in cardamom-scented milk.</p>
                     </div>
                     <div class="card-back">
                         <h4>Khira Gaintha</h4>
-                        <p><strong>Ingredients:</strong> 2c Rice flour [cite: 63], milk [cite: 66, 70], sugar [cite: 65], nuts[cite: 71, 72].</p>
+                        <p><strong>Ingredients:</strong> 2c Rice flour, sugar, 7c milk (inc. evaporated), cardamom, coconut, nuts.</p>
                         <ol>
-                            <li>Cook rice flour in boiling water, then knead into balls[cite: 76, 79].</li>
-                            <li>Steam balls, then simmer in thickened milk[cite: 80, 81].</li>
-                            <li>Add balls to milk and serve cool[cite: 82, 84].</li>
+                            <li>Boil water with salt/oil and stir in flour to make a dough.</li>
+                            <li>Form dough into small balls and steam them.</li>
+                            <li>Boil milk and evaporated milk until reduced and thick.</li>
+                            <li>Simmer balls in milk; garnish with nuts and coconut.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:8; --pos:1" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:8" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Laal Mutton</div>
                     <div class="card-front">
                         <h3>Laal Mutton</h3>
-                        <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=400" class="dish-img">
-                        <p>Fiery red mutton curry [cite: 261] using red chilli paste[cite: 264].</p>
+                        <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=500" class="dish-img">
+                        <p>Deep red, fiery meat curry slow-cooked in a rich ghee base.</p>
                     </div>
                     <div class="card-back">
                         <h4>Laal Mutton</h4>
-                        <p><strong>Ingredients:</strong> 1kg mutton [cite: 263], red chilli paste [cite: 264], ghee [cite: 267], curd[cite: 268].</p>
-                        <ul>
-                            <li>A meat-heavy red curry using dry chillies[cite: 265, 266].</li>
-                        </ul>
+                        <p><strong>Ingredients:</strong> 1kg Mutton, red chilli paste, ghee, curd, garlic, whole spices, onion.</p>
+                        <ol>
+                            <li>Slow cook the mutton in ghee with whole spices and onions.</li>
+                            <li>Add the red chilli paste and curd to create the deep color.</li>
+                            <li>Simmer on low heat until the meat is fork-tender.</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:9; --pos:2" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:9" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Laau Ghanta</div>
                     <div class="card-front">
                         <h3>Laau Ghanta</h3>
-                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=400" class="dish-img">
-                        <p>Bottle gourd stew with black beans or prawns[cite: 171, 180, 193].</p>
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=500" class="dish-img">
+                        <p>Mixed vegetable stew featuring bottle gourd, beans, and coconut.</p>
                     </div>
                     <div class="card-back">
                         <h4>Laau Ghanta</h4>
-                        <p><strong>Ingredients:</strong> 12" laau [cite: 180], 4 potatoes [cite: 181], coconut [cite: 178], black beans[cite: 179].</p>
+                        <p><strong>Ingredients:</strong> 12" Laau, potato, onion, coconut, black beans, ghee, phutan, hingu.</p>
                         <ol>
-                            <li>Sauté onion/ginger in ghee with phutan[cite: 188, 189].</li>
-                            <li>Cook gourd and potato until soft[cite: 190].</li>
-                            <li>Reduce gravy and serve with rice[cite: 192].</li>
+                            <li>Sauté onion and ginger in ghee with phutan and cardamom.</li>
+                            <li>Add the gourd, potato, coconut, and beans; cook covered until soft.</li>
+                            <li>Stir in tomato, hingu, and coriander.</li>
+                            <li>Reduce the gravy on high heat to reach desired consistency.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:10; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:10" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Malai Chicken</div>
                     <div class="card-front">
                         <h3>Malai Chicken</h3>
-                        <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=400" class="dish-img">
-                        <p>Creamy, herb-marinated broiled chicken[cite: 326, 329, 355].</p>
+                        <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=500" class="dish-img">
+                        <p>Velvety chicken marinated in cream and cheese, then broiled until golden.</p>
                     </div>
                     <div class="card-back">
                         <h4>Malai Chicken</h4>
-                        <p><strong>Ingredients:</strong> Heavy cream, cheese [cite: 328], mint/coriander/chilli paste [cite: 329], tandoori masala[cite: 351].</p>
+                        <p><strong>Ingredients:</strong> Chicken, heavy cream, cheese, herb paste, methi, mustard oil.</p>
                         <ol>
-                            <li>Marinate with lemon and garlic, then with hung curd and cream[cite: 327, 351].</li>
-                            <li>Broil in oven, flipping in between[cite: 355].</li>
+                            <li>Marinate chicken with lemon and salt for 30 minutes.</li>
+                            <li>Coat in cream, cheese, herb paste, and oil; rest overnight.</li>
+                            <li>Broil in the oven, flipping once, until fully cooked.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:11; --pos:1" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:11" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Mango Pie</div>
                     <div class="card-front">
                         <h3>Mango Pie</h3>
-                        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400" class="dish-img">
-                        <p>No-bake mango dessert with cheese and jello[cite: 107, 110, 112].</p>
+                        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=500" class="dish-img">
+                        <p>Refreshing, no-bake mango cream cheese pie.</p>
                     </div>
                     <div class="card-back">
                         <h4>Mango Pie</h4>
-                        <p><strong>Ingredients:</strong> 15oz pulp [cite: 108], 8oz cheese [cite: 110], 8oz cool wip [cite: 111], 2 jello pkts[cite: 112].</p>
+                        <p><strong>Ingredients:</strong> 15oz pulp, 1/2c sugar, 8oz cheese, 8oz cool whip, jello, crust.</p>
                         <ol>
-                            <li>Mix cheese and sugar, then add pulp and cool wip[cite: 116, 117, 118].</li>
-                            <li>Dissolve jello in microwave and mix in[cite: 119].</li>
-                            <li>Pour into crust and prepare one day ahead[cite: 120, 121].</li>
+                            <li>Mix softened cheese and sugar; add pulp and fold in whip.</li>
+                            <li>Dissolve jello in 1/2c hot water and stir into the mix.</li>
+                            <li>Pour into Graham crust and chill for 24 hours.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:12; --pos:2" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:12" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Poda Pitha</div>
                     <div class="card-front">
                         <h3>Poda Pitha</h3>
-                        <img src="https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=400" class="dish-img">
-                        <p>Slow-cooked cake made from fermented rice and gram[cite: 38, 54, 58].</p>
+                        <img src="https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=500" class="dish-img">
+                        <p>Slow-baked rice and gram cake traditional to the Raja festival.</p>
                     </div>
                     <div class="card-back">
                         <h4>Poda Pitha</h4>
-                        <p><strong>Ingredients:</strong> 4c rice [cite: 39], 2c gram [cite: 40], 1c coconut [cite: 41], 3c sugar[cite: 43].</p>
+                        <p><strong>Ingredients:</strong> 4c Rice, 2c black gram, 1c coconut, 3c sugar/jaggery, ginger, cashew, ghee, cardamom.</p>
                         <ol>
-                            <li>Grind soaked rice and gram separately[cite: 52, 53].</li>
-                            <li>Ferment for 4 hrs, then mix with coconut and sugar[cite: 54].</li>
-                            <li>Pour into oiled pressure cooker and cook for one hour on simmer[cite: 56, 57, 58].</li>
+                            <li>Soak rice and gram for 4 hours; grind gram fine and rice coarse.</li>
+                            <li>Ferment the batter for 4 hours, then mix with coconut, ginger, and sugar.</li>
+                            <li>Pour into oiled pressure cooker and cook on simmer for 1 hour without the whistle.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:13; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:13" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Poha Roll</div>
                     <div class="card-front">
                         <h3>Poha Roll</h3>
-                        <img src="https://images.unsplash.com/photo-1601050690597-df056fb27791?q=80&w=400" class="dish-img">
-                        <p>Crunchy potato and rice-flake rolls[cite: 279, 281, 282].</p>
+                        <img src="https://images.unsplash.com/photo-1601050690597-df056fb27791?q=80&w=500" class="dish-img">
+                        <p>Crispy potato and rice flake rolls packed with roasted peanuts.</p>
                     </div>
                     <div class="card-back">
                         <h4>Poha Roll</h4>
-                        <p><strong>Ingredients:</strong> 1 egg [cite: 280], 30gm poha [cite: 281], 100gm potato [cite: 282], 200gm roasted peanut[cite: 284].</p>
-                        <ul>
-                            <li>A savoury snack made with potato, poha, and amchur[cite: 286].</li>
-                        </ul>
+                        <p><strong>Ingredients:</strong> 30g Poha, 100g potato, 200g peanut, onion, amchur, 1 egg.</p>
+                        <ol>
+                            <li>Mash potato and mix with soaked poha, onion, and spices.</li>
+                            <li>Form into rolls or logs and dip in beaten egg.</li>
+                            <li>Fry until golden and crispy.</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:14; --pos:1" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:14" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Potala Kurma</div>
                     <div class="card-front">
                         <h3>Potala Kurma</h3>
-                        <img src="https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?q=80&w=400" class="dish-img">
-                        <p>Pointed gourd in a rich yogurt and chena gravy[cite: 227, 238, 257].</p>
+                        <img src="https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?q=80&w=500" class="dish-img">
+                        <p>Pointed gourd curry with homemade chena and coconut milk.</p>
                     </div>
                     <div class="card-back">
                         <h4>Potala Kurma</h4>
-                        <p><strong>Ingredients:</strong> Gourd [cite: 229], tomato, yogurt [cite: 231, 238], ½ cup coconut milk[cite: 239].</p>
+                        <p><strong>Ingredients:</strong> Gourd, chena, onion, ginger-garlic, yogurt, coconut milk, ghee.</p>
                         <ol>
-                            <li>Fry slitted gourds[cite: 248, 249].</li>
-                            <li>Sauté aromatics, then add crumbled chena[cite: 251, 257].</li>
-                            <li>Add gourds and cook to desired consistency[cite: 258, 259].</li>
+                            <li>Fry gourds with deep slits; make fresh chena from milk.</li>
+                            <li>Sauté spices and ginger-chili paste; add yogurt.</li>
+                            <li>Mix in chena, gourds, and coconut milk.</li>
+                            <li>Simmer to thicken and garnish with cream.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:15; --pos:2" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:15" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Potol Rasha</div>
                     <div class="card-front">
                         <h3>Potol Rasha</h3>
-                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=400" class="dish-img">
-                        <p>Pointed gourd in coconut milk[cite: 307, 311].</p>
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=500" class="dish-img">
+                        <p>Sautéed pointed gourds simmered in a creamy coconut milk gravy.</p>
                     </div>
                     <div class="card-back">
                         <h4>Potol Rasha</h4>
-                        <p><strong>Ingredients:</strong> 500gm Potol [cite: 309], 1 cup coconut milk [cite: 311], ghee [cite: 317], panch phutan[cite: 312].</p>
+                        <p><strong>Ingredients:</strong> 500g Potol, coconut-ginger paste, coconut milk, panch phutan, ghee.</p>
                         <ol>
-                            <li>Fry potol pieces and keep aside[cite: 322].</li>
-                            <li>Sauté masala paste in ghee with phutan[cite: 323, 324].</li>
-                            <li>Add potol and coconut milk[cite: 325].</li>
+                            <li>Fry the gourd rounds in ghee until golden.</li>
+                            <li>Sauté the masala paste in ghee with phutan.</li>
+                            <li>Simmer the gourds in coconut milk until the oil separates.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:16; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:16" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Pudding</div>
                     <div class="card-front">
                         <h3>Pudding</h3>
-                        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=400" class="dish-img">
-                        <p>Silky steamed caramel custard[cite: 14, 21].</p>
+                        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=500" class="dish-img">
+                        <p>Velvety caramel custard steamed to perfection in a tiffin box.</p>
                     </div>
                     <div class="card-back">
                         <h4>Pudding</h4>
-                        <p><strong>Ingredients:</strong> 2c Milk [cite: 15], 4 eggs [cite: 16], 7tsp sugar [cite: 17], 2tsp caramel sugar[cite: 19].</p>
+                        <p><strong>Ingredients:</strong> 2c milk, 4 eggs, 7tsp sugar, 1tsp vanilla. Caramel: 2tsp sugar, 1/2tsp oil.</p>
                         <ol>
-                            <li>Make caramel in a tiffin box[cite: 21, 22].</li>
-                            <li>Grind eggs, sugar, and milk; pour into tiffin[cite: 23, 24].</li>
-                            <li>Steam in pressure cooker for one whistle, then slow flame for 10-20 mins[cite: 26, 27].</li>
+                            <li>Prepare caramel in a tiffin box until dark brown.</li>
+                            <li>Blend eggs, sugar, milk, and vanilla in a grinder.</li>
+                            <li>Steam tiffin in a pressure cooker water bath.</li>
+                            <li>Cook for 1 whistle, then 15 minutes on a slow flame.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:17; --pos:1" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:17" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Fruit Pudding</div>
                     <div class="card-front">
                         <h3>Quick Fruit Pudding</h3>
-                        <img src="https://images.unsplash.com/photo-1541924445947-8898144c4491?q=80&w=400" class="dish-img">
-                        <p>Instant mango dessert[cite: 122, 123].</p>
+                        <img src="https://images.unsplash.com/photo-1541924445947-8898144c4491?q=80&w=500" class="dish-img">
+                        <p>Instant mango cream dessert topped with fresh seasonal fruit.</p>
                     </div>
                     <div class="card-back">
-                        <h4>Fruit Pudding</h4>
-                        <p><strong>Ingredients:</strong> 1 tin mango pulp [cite: 123], 1 tin condense milk [cite: 124], 1 container whip cream[cite: 125].</p>
+                        <h4>Quick Fruit Pudding</h4>
+                        <p><strong>Ingredients:</strong> 1 tin mango pulp, 1 tin condensed milk, 1 container whip cream.</p>
                         <ol>
-                            <li>Mix pulp and condensed milk, then add whip cream[cite: 126].</li>
-                            <li>Garnish with fruits and serve fresh or frozen[cite: 127, 128].</li>
+                            <li>Whisk the mango pulp and condensed milk together.</li>
+                            <li>Add the whip cream and mix well.</li>
+                            <li>Garnish with fresh fruits and serve chilled or frozen.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:18; --pos:2" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:18" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Rajma</div>
                     <div class="card-front">
                         <h3>Rajma</h3>
-                        <img src="https://images.unsplash.com/photo-1585937421612-70a0f295561a?q=80&w=400" class="dish-img">
-                        <p>Hearty kidney beans with a roasted besan base[cite: 161, 162].</p>
+                        <img src="https://images.unsplash.com/photo-1585937421612-70a0f295561a?q=80&w=500" class="dish-img">
+                        <p>Comforting red kidney beans thickened with a hint of roasted besan.</p>
                     </div>
                     <div class="card-back">
                         <h4>Rajma</h4>
-                        <p><strong>Ingredients:</strong> 1tbsp bessan [cite: 162], 2c boiled Rajama [cite: 167], ghee [cite: 163], 4 bay leaf[cite: 168].</p>
-                        <ul>
-                            <li>Fry besan in ghee to a reddish color before adding tomatoes and ginger[cite: 170].</li>
-                        </ul>
+                        <p><strong>Ingredients:</strong> 2c boiled rajma, 1tbsp besan, ghee, ginger, tomato, bay leaf, jeera.</p>
+                        <ol>
+                            <li>Heat ghee and temper with bay leaf and jeera.</li>
+                            <li>Add besan and fry until it turns reddish and fragrant.</li>
+                            <li>Add the aromatics, tomatoes, and boiled beans; simmer until thick.</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:19; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:19" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Rasagolla</div>
                     <div class="card-front">
                         <h3>Rasagolla</h3>
-                        <img src="https://images.unsplash.com/photo-1605065532060-60f1ec3c8801?q=80&w=400" class="dish-img">
-                        <p>Traditional spongy cheese balls in syrup[cite: 97, 104].</p>
+                        <img src="https://images.unsplash.com/photo-1605065532060-60f1ec3c8801?q=80&w=500" class="dish-img">
+                        <p>Soft, spongy white balls of fresh homemade chenna in sugar syrup.</p>
                     </div>
                     <div class="card-back">
                         <h4>Rasagolla</h4>
-                        <p><strong>Ingredients:</strong> 3L full cream milk [cite: 98, 106], vinegar [cite: 98], 1.5tbsp flour [cite: 101], 1.5c sugar[cite: 103].</p>
+                        <p><strong>Ingredients:</strong> 3L milk, 3tbsp vinegar, 1.5tbsp flour, 1.5c sugar, cardamom.</p>
                         <ol>
-                            <li>Curdle milk, strain, and hang for an hour[cite: 98, 100].</li>
-                            <li>Knead chena until smooth[cite: 101, 102].</li>
-                            <li>Boil balls in syrup for 12 mins (high) and 5 mins (low)[cite: 104].</li>
+                            <li>Curdle boiling milk with vinegar; strain and hang for 1 hour.</li>
+                            <li>Knead the chenna with flour for 8 minutes until smooth.</li>
+                            <li>Boil balls in sugar syrup for 12 mins on high and 5 mins on low.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:20; --pos:1" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:20" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Rashmalai</div>
                     <div class="card-front">
                         <h3>Rashmalai</h3>
-                        <img src="https://images.unsplash.com/photo-1626202340502-9965133d4945?q=80&w=400" class="dish-img">
-                        <p>Rasagollas in a kulfi-flavored milk sauce[cite: 86, 91, 94].</p>
+                        <img src="https://images.unsplash.com/photo-1626202340502-9965133d4945?q=80&w=500" class="dish-img">
+                        <p>Spongy Rasagollas reimagined in a rich and creamy Kulfi sauce.</p>
                     </div>
                     <div class="card-back">
                         <h4>Rashmalai</h4>
-                        <p><strong>Ingredients:</strong> 1 box Gasagolla [cite: 88], 1 can evaporated milk [cite: 89], 1 cup milk [cite: 90], Gits Kulfi mix[cite: 91].</p>
+                        <p><strong>Ingredients:</strong> 1 box Rasagolla, 1 can evaporated milk, 1c milk, Gits Kulfi mix.</p>
                         <ol>
-                            <li>Heat milk and evaporated milk, then add kulfi mix[cite: 93].</li>
-                            <li>Squeeze rasagollas and drop into hot milk[cite: 94].</li>
-                            <li>Warm for 2 mins and serve cold[cite: 95, 96].</li>
+                            <li>Heat milk and evaporated milk; stir in the Kulfi mix.</li>
+                            <li>Squeeze the syrup from the Rasagollas and drop them into the milk.</li>
+                            <li>Warm for 2 minutes to merge flavors; serve cold.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:21; --pos:2" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:21" onclick="toggleCard(this)">
                 <div class="card-inner">
                     <div class="card-tab">Suji Cake</div>
                     <div class="card-front">
                         <h3>Suji Cake</h3>
-                        <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?q=80&w=400" class="dish-img">
-                        <p>Pitta-style cake with suji and buttermilk[cite: 129, 130, 131].</p>
+                        <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?q=80&w=500" class="dish-img">
+                        <p>Dense semolina cake with coconut and cardamom, baked to a golden brown.</p>
                     </div>
                     <div class="card-back">
                         <h4>Suji Cake</h4>
-                        <p><strong>Ingredients:</strong> 3c suji [cite: 130], 3c butter milk [cite: 131], 1c coconut [cite: 135], soda[cite: 134].</p>
-                        <ul>
-                            <li>Mix and set aside for 2 hrs, then bake for 1 hr at 350F[cite: 137].</li>
-                        </ul>
+                        <p><strong>Ingredients:</strong> 3c suji, 3c buttermilk, 3/4c oil, 3/4c sugar, 1tsp soda, 1c coconut.</p>
+                        <ol>
+                            <li>Mix all ingredients together in a bowl.</li>
+                            <li>Let the batter sit at room temperature for 2 hours.</li>
+                            <li>Bake in a preheated oven at 350°F for exactly one hour.</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="recipe-card" style="--i:22; --pos:0" onclick="toggleCard(this)">
+            <div class="recipe-card" style="--i:22" onclick="toggleCard(this)">
                 <div class="card-inner">
-                    <div class="card-tab">Watergate Salad</div>
+                    <div class="card-tab">Watergate</div>
                     <div class="card-front">
                         <h3>Watergate Salad</h3>
-                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=400" class="dish-img">
-                        <p>Sweet pistachio and pineapple salad[cite: 29, 30, 31].</p>
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=500" class="dish-img">
+                        <p>A classic fluffy pistachio and pineapple dessert salad.</p>
                     </div>
                     <div class="card-back">
                         <h4>Watergate Salad</h4>
-                        <p><strong>Ingredients:</strong> Pistachio pudding mix [cite: 30], pineapple [cite: 31], marshmallows [cite: 32], nuts [cite: 33], whip topping[cite: 34].</p>
+                        <p><strong>Ingredients:</strong> 4oz pudding mix, 20oz crushed pineapple, 1c marshmallow, nuts, 1.75c whip.</p>
                         <ol>
-                            <li>Stir pudding, pineapple, marshmallow, and nuts[cite: 35].</li>
-                            <li>Gently fold in whipped topping and refrigerate for one hour[cite: 36, 37].</li>
+                            <li>Stir pudding mix, pineapple with juice, marshmallows, and nuts until blended.</li>
+                            <li>Gently fold in the whipped topping.</li>
+                            <li>Refrigerate for at least one hour before serving.</li>
                         </ol>
                     </div>
                 </div>
@@ -632,8 +658,12 @@
             card.classList.remove('active');
             return;
         }
+
         const activeCard = document.querySelector('.recipe-card.active');
-        if (activeCard) activeCard.classList.remove('active');
+        if (activeCard) {
+            activeCard.classList.remove('active');
+        }
+
         card.classList.add('active');
     }
 </script>
