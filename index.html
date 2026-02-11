@@ -3,139 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nadine's Favorite Recipes</title>
+    <title>The Digital Recipe Box</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="recipe-box">
-        <header class="box-lid">
-            <h1>The Secret Ingredient is Love</h1>
-            <p>NADINE'S FAVORITE RECIPES</p>
-        </header>
 
-        <nav class="category-tabs">
-            <button class="tab-btn active" onclick="filterCategory('sugar')">DESSERTS</button>
-            <button class="tab-btn" onclick="filterCategory('salt')">MEATS & SAVORY</button>
-            <button class="tab-btn" onclick="filterCategory('small-plates')">SMALL PLATES</button>
-        </nav>
-
-        <main class="card-container">
-            <section class="category-section active" id="sugar">
-                <article class="recipe-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Arisa_Pitha.jpg" alt="Arisha Pitha">
-                    <div class="card-text">
-                        <h3>Arisha Pitha</h3>
-                        <p><strong>Ingredients:</strong> 3c rice, 2c Jaggery, 1/4c water, 1 tbsp sesame seed, 1c Atta, Cardamom pwd.</p>
-                        <p><strong>Method:</strong> Soak rice overnight. Boil jaggery in water until it reaches a "solid lump" consistency. Mix in rice powder and atta slowly. Shape into circles, roll in sesame, and fry.</p>
+<div class="scene">
+    <div class="recipe-box-3d">
+        <div class="box-face front">RECIPE BOX</div>
+        <div class="box-face back"></div>
+        <div class="box-face right"></div>
+        <div class="box-face left"></div>
+        <div class="box-face bottom"></div>
+        
+        <div class="cards-stack">
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Arisha Pitha</h3><p>Oriya Sweet</p></div>
+                    <div class="card-back">
+                        <h4>Arisha Pitha</h4>
+                        <p><strong>Ingredients:</strong> 3c rice, 2c jaggery, 1/4c water, 1tbsp sesame, 1c atta, cardamom.</p>
+                        <p><strong>Method:</strong> Soak/grind rice. Boil jaggery to "solid lump" consistency. Mix in rice and atta. Shape, roll in sesame, and fry.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <img src="https://img.youtube.com/vi/XulUVZiiS0o/maxresdefault.jpg" alt="Poda Pitha">
-                    <div class="card-text">
-                        <h3>Poda Pitha</h3>
-                        <p><strong>Ingredients:</strong> 4c Rice, 2c black gram (Biri), 1c grated coconut, coconut slices, 3c jaggery, 50g ginger, cashew, ghee, salt, baking powder, cardamom/bay leaf.</p>
-                        <p><strong>Method:</strong> Grind soaked rice (coarse) and biri (fine). Ferment for 4 hours. Mix all ingredients. Pour into oiled pressure cooker and cook on simmer for 1 hour without whistle.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Pudding</h3><p>Traditional Custard</p></div>
+                    <div class="card-back">
+                        <h4>Pudding</h4>
+                        <p><strong>Ingredients:</strong> 2c milk, 4 eggs, 7tsp sugar, vanilla. Caramel: 2tsp sugar, 1.5tsp oil.</p>
+                        <p><strong>Method:</strong> Make caramel in tiffin box. Blend other ingredients. Place tiffin in pressure cooker water bath. 1 whistle then 20m slow flame.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <img src="https://www.bettycrocker.com/-/media/GMI/Recipes/W/Watergate-Salad.jpg" alt="Watergate Salad">
-                    <div class="card-text">
-                        <h3>Watergate Salad</h3>
-                        <p><strong>Ingredients:</strong> 4oz pistachio pudding mix, 20oz crushed pineapple with juice, 1c marshmallows, 1/2c chopped nuts, 1 3/4c whipped topping.</p>
-                        <p><strong>Method:</strong> Stir pudding, pineapple, marshmallows, and nuts. Fold in whipped topping and refrigerate for one hour.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Poda Pitha</h3><p>Burnt Cake</p></div>
+                    <div class="card-back">
+                        <h4>Poda Pitha</h4>
+                        <p><strong>Ingredients:</strong> 4c Rice, 2c Biri, 1c coconut, jaggery, ginger, cashew, ghee, salt, baking powder, cardamom.</p>
+                        <p><strong>Method:</strong> Grind soaked rice/biri. Ferment 4hrs. Mix ingredients. Bake in oiled pressure cooker (no whistle) for 1hr on simmer.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <img src="https://www.oriyarasoi.com/wp-content/uploads/2013/10/Besara.jpg" alt="Khira Gaintha">
-                    <div class="card-text">
-                        <h3>Khira Gaintha (Kheer Puli)</h3>
-                        <p><strong>Ingredients:</strong> 2c Rice flour, 7c total milk (inc. evaporated), 3/4c sugar, cardamom, coconut, cashews, almonds.</p>
-                        <p><strong>Method:</strong> Boil water with oil/salt, stir in rice flour to make dough. Form small balls and steam. Thicken milk with sugar/cardamom, add balls, and garnish with nuts.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Khira Gaintha</h3><p>Milk Dumplings</p></div>
+                    <div class="card-back">
+                        <h4>Khira Gaintha</h4>
+                        <p><strong>Ingredients:</strong> 2c Rice flour, 2c water, milk (inc evaporated), sugar, cardamom, coconut, nuts.</p>
+                        <p><strong>Method:</strong> Boil water with oil/salt, stir in flour to make dough. Form balls. Boil milk until thick, add balls and simmer.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <div class="card-text">
-                        <h3>Mango Pie</h3>
-                        <p><strong>Ingredients:</strong> 15oz Mango pulp, 1/2c sugar, 8oz Philadelphia cheese, 8oz Cool Whip, 2 Jello packets, Graham cracker crust.</p>
-                        <p><strong>Method:</strong> Mix cheese (room temp) with sugar, pulp, and whipped cream. Dissolve Jello in hot water, mix in, pour into crust, and set overnight.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Mango Pie</h3><p>No-Bake Dessert</p></div>
+                    <div class="card-back">
+                        <h4>Mango Pie</h4>
+                        <p><strong>Ingredients:</strong> 15oz Mango pulp, 1/2c sugar, 8oz Philly cheese, 8oz Cool Whip, 2 jello pkts, crust.</p>
+                        <p><strong>Method:</strong> Mix cheese, sugar, pulp, and whip. Dissolve jello in hot water, stir into mix. Pour into crust and set overnight.</p>
                     </div>
-                </article>
-            </section>
+                </div>
+            </div>
 
-            <section class="category-section" id="salt">
-                <article class="recipe-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Birria_de_Chivo.jpg" alt="Birria">
-                    <div class="card-text">
-                        <h3>Birria (Mexican Pulled Goat)</h3>
-                        <p><strong>Ingredients:</strong> 4lb goat meat, chili powder, cumin, ginger, cinnamon, cloves, onion, 8 garlic cloves, chicken broth, fire-roasted tomatoes, oregano.</p>
-                        <p><strong>Method:</strong> Sear meat. Sauté onion/garlic/spices. Add broth and blend sauce until smooth. Pressure cook meat for 45 mins. Shred and serve in consommé.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Watergate Salad</h3><p>Pistachio Delight</p></div>
+                    <div class="card-back">
+                        <h4>Watergate Salad</h4>
+                        <p><strong>Ingredients:</strong> Pudding mix, 20oz pineapple, 1c marshmallows, 1/2c nuts, 1.75c whipped topping.</p>
+                        <p><strong>Method:</strong> Combine all but topping. Fold in topping. Chill 1 hour.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <div class="card-text">
-                        <h3>Besara</h3>
-                        <p><strong>Ingredients:</strong> Pumpkin, yam, raw banana, sweet potato, potol, cowpeas, chickpeas, brinjal, coconut, mustard/cumin seeds, ginger, black pepper, jaggery.</p>
-                        <p><strong>Method:</strong> Grind mustard/cumin/ginger into paste. Cook veggies with paste and coconut. Temper with ghee, mustard seeds, and red chillies.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Besara</h3><p>Mustard Veg Curry</p></div>
+                    <div class="card-back">
+                        <h4>Besara</h4>
+                        <p><strong>Ingredients:</strong> Pumpkin, yam, banana, sweet potato, potol, cowpeas, chickpeas, mustard/cumin paste.</p>
+                        <p><strong>Method:</strong> Grind mustard/cumin/ginger. Cook veggies in paste and coconut. Temper with ghee and chillies.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <div class="card-text">
-                        <h3>Laal Mutton</h3>
-                        <p><strong>Ingredients:</strong> 1kg Mutton, red chilli paste, whole/crushed red chillies, 1.5c ghee, curd, garlic paste, cardamom, cinnamon, bay leaves, coriander powder.</p>
-                        <p><strong>Method:</strong> A rich, spicy mutton curry characterized by its deep red color from dried chillies and slow cooking in ghee.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Laal Mutton</h3><p>Red Meat Curry</p></div>
+                    <div class="card-back">
+                        <h4>Laal Mutton</h4>
+                        <p><strong>Ingredients:</strong> 1kg Mutton, red chilli paste, whole chillies, 1.5c ghee, curd, garlic paste, cardamom, cinnamon.</p>
+                        <p><strong>Method:</strong> Slow cook mutton in ghee with chilli paste and curd until tender and deep red.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <div class="card-text">
-                        <h3>Potala Kurma</h3>
-                        <p><strong>Ingredients:</strong> Pointed gourd (Potala), onion, tomato, ginger-garlic paste, yogurt, coconut milk, chena (curd cheese), garam masala.</p>
-                        <p><strong>Method:</strong> Fry gourds. Make a paste of ginger/chili. Sauté spices, add yogurt, water, and crumbled chena. Add gourds and simmer until thick.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Malai Chicken</h3><p>Creamy Chicken</p></div>
+                    <div class="card-back">
+                        <h4>Malai Chicken</h4>
+                        <p><strong>Ingredients:</strong> 1kg Chicken, cashew/poppy seed paste, curd, cream, white pepper, ginger-garlic.</p>
+                        <p><strong>Method:</strong> Marinate chicken in curd/cream. Cook with nut paste until rich and velvety.</p>
                     </div>
-                </article>
-            </section>
+                </div>
+            </div>
 
-            <section class="category-section" id="small-plates">
-                <article class="recipe-card">
-                    <div class="card-text">
-                        <h3>Kabab</h3>
-                        <p><strong>Ingredients:</strong> Ground chicken/turkey, ginger, garlic, dhaniya, ajwain, curd, Shan Chaplee masala, egg.</p>
-                        <p><strong>Method:</strong> Mix and freeze for 30 mins. Shape into balls and boil for 10 mins. Strain, dry, and fry in butter for a minute. Garnish with chaat masala.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Birria (Goat)</h3><p>Mexican Stew</p></div>
+                    <div class="card-back">
+                        <h4>Birria</h4>
+                        <p><strong>Ingredients:</strong> 4lb goat, cinnamon, cloves, cumin, ginger, broth, roasted tomatoes, vinegar.</p>
+                        <p><strong>Method:</strong> Sauté aromatics. Blend with tomatoes/broth. Pressure cook meat in sauce 45m. Shred and serve.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <div class="card-text">
-                        <h3>Poha Roll</h3>
-                        <p><strong>Ingredients:</strong> 1 egg, 30g Poha, 100g potato, green chillies, 200g roasted peanut, onion, amchur powder.</p>
-                        <p><strong>Method:</strong> Combine ingredients to form rolls, utilizing the texture of flattened rice (poha) and potatoes.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Kabab</h3><p>Chicken/Turkey</p></div>
+                    <div class="card-back">
+                        <h4>Kabab</h4>
+                        <p><strong>Ingredients:</strong> Ground meat, ginger, garlic, curd, Chaplee masala, egg, butter.</p>
+                        <p><strong>Method:</strong> Mix/freeze 30m. Shape balls, boil 10m. Dry and flash-fry in butter.</p>
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article class="recipe-card">
-                    <div class="card-text">
-                        <h3>Rashmalai</h3>
-                        <p><strong>Ingredients:</strong> 1 box Rasagolla, 1 can evaporated milk, 1c milk, 1 packet Gits Kulfi mix.</p>
-                        <p><strong>Method:</strong> Heat milk and kulfi mix. Squeeze syrup from rasagollas and drop into hot milk. Warm for 2 mins and serve cold.</p>
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Poha Roll</h3><p>Rice Flake Snack</p></div>
+                    <div class="card-back">
+                        <h4>Poha Roll</h4>
+                        <p><strong>Ingredients:</strong> Egg, 30g Poha, 100g potato, chillies, 200g peanuts, onion, amchur.</p>
+                        <p><strong>Method:</strong> Mash potato and poha with spices. Form rolls and fry until crisp.</p>
                     </div>
-                </article>
-            </section>
-        </main>
+                </div>
+            </div>
+
+            <div class="recipe-card" onclick="this.classList.toggle('active')">
+                <div class="card-inner">
+                    <div class="card-front"><h3>Rashmalai</h3><p>Quick Dessert</p></div>
+                    <div class="card-back">
+                        <h4>Rashmalai</h4>
+                        <p><strong>Ingredients:</strong> 1 box Rasagolla, 1 can evaporated milk, 1c milk, Gits Kulfi mix.</p>
+                        <p><strong>Method:</strong> Boil milk with kulfi mix. Squeeze rasagollas, drop in hot milk. Serve cold.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
+</div>
 
-    <script>
-        function filterCategory(catId) {
-            document.querySelectorAll('.category-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(catId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-    </script>
 </body>
 </html>
